@@ -53,18 +53,19 @@ POSTGRES_HOST_OPTS="-h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER"
 
 echo "Finding latest backup"
 
-LATEST_BACKUP=$(aws s3 ls s3://$S3_BUCKET/$S3_PREFIX/ | sort | tail -n 1 | awk '{ print $4 }')
-
-echo "Fetching ${LATEST_BACKUP} from S3"
 
 if [ "$AES_KEY"  == "**None**" ]; then
  LATEST_BACKUP=$(aws s3 ls s3://$S3_BUCKET/$S3_PREFIX/ | sort | tail -n 1 | awk '{ print $4 }')
+ echo "Fetching ${LATEST_BACKUP} from S3"
  aws s3 cp s3://$S3_BUCKET/$S3_PREFIX/${LATEST_BACKUP} dump.sql.gz
  gzip -d dump.sql.gz
 
+###PIT implementation is missing
+
 else
-  LATEST_BACKUP=$(aws s3 ls s3://$S3_BUCKET/$S3_PREFIX/ | sort | tail -n 1 | grep dat |awk '{ print $4 }')
-  aws s3 cp s3://$S3_BUCKET/$S3_PREFIX/${LATEST_BACKUP} dump.sql.gz.dat
+  LATEST_BACKUP=$(aws s3 ls s3://$S3_BUCKET/$S3_PREFIX/ --recursive  | tail -n 1 | awk '{print $4}')
+  aws s3 cp s3://$S3_BUCKET/${LATEST_BACKUP} dump.sql.gz.dat
+  echo "Fetching ${LATEST_BACKUP} from S3"
   openssl enc -in dump.sql.gz.dat  -out dump.sql.gz -d -aes256 -md sha256 -pbkdf2 -k $AES_KEY
   gzip -d dump.sql.gz
 fi

@@ -19,7 +19,7 @@ ENV S3_REGION us-west-1
 ENV S3_PATH 'backup'
 ENV DROP_PUBLIC 'no'
 ENV AES_KEY **None**
-
+ENV RESTORE_TO latest
 
 ADD restore.sh restore.sh
 
