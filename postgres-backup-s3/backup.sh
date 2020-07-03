@@ -59,6 +59,9 @@ POSTGRES_HOST_OPTS="-h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER $POSTG
 
 echo "Creating dump of ${POSTGRES_DATABASE} database from ${POSTGRES_HOST}..."
 
+openssl version
+
+
 pg_dump $POSTGRES_HOST_OPTS $POSTGRES_DATABASE | gzip > dump.sql.gz
 
 if [ "$AES_KEY"  == "**None**" ]; then
@@ -69,7 +72,7 @@ if [ "$AES_KEY"  == "**None**" ]; then
 
 else
 
-openssl version
+
 openssl enc -in dump.sql.gz  -out dump.sql.gz.dat -e -aes256  -pbkdf2 -k $AES_KEY
 cat dump.sql.gz.dat | aws $AWS_ARGS s3 cp - s3://$S3_BUCKET/$S3_PREFIX/$(date +"%Y")/$(date +"%m")/$(date +"%d")/${POSTGRES_DATABASE}_$(date +"%H:%M:%SZ").sql.gz.dat || exit 2
 
