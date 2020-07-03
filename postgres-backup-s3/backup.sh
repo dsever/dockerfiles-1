@@ -61,8 +61,18 @@ echo "Creating dump of ${POSTGRES_DATABASE} database from ${POSTGRES_HOST}..."
 
 pg_dump $POSTGRES_HOST_OPTS $POSTGRES_DATABASE | gzip > dump.sql.gz
 
-echo "Uploading dump to $S3_BUCKET"
+if [ "$AES_KEY"  == "**None**" ]; then
 
-cat dump.sql.gz | aws $AWS_ARGS s3 cp - s3://$S3_BUCKET/$S3_PREFIX/$(date +"%Y")/$(date +"%m")/$(date +"%d")/${POSTGRES_DATABASE}_$(date +"%H:%M:%SZ").sql.gz || exit 2
+  echo "Uploading dump to $S3_BUCKET"
+
+  cat dump.sql.gz | aws $AWS_ARGS s3 cp - s3://$S3_BUCKET/$S3_PREFIX/$(date +"%Y")/$(date +"%m")/$(date +"%d")/${POSTGRES_DATABASE}_$(date +"%H:%M:%SZ").sql.gz || exit 2
+
+else
+
+openssl enc -in dump.sql.gz  -out dump.sql.gz.dat -e -aes256  -pbkdf2 -k $AES_KEY
+cat dump.sql.gz.dat | aws $AWS_ARGS s3 cp - s3://$S3_BUCKET/$S3_PREFIX/$(date +"%Y")/$(date +"%m")/$(date +"%d")/${POSTGRES_DATABASE}_$(date +"%H:%M:%SZ").sql.gz.dat || exit 2
+
+fi
+
 
 echo "SQL backup uploaded successfully"
