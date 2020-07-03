@@ -57,8 +57,18 @@ LATEST_BACKUP=$(aws s3 ls s3://$S3_BUCKET/$S3_PREFIX/ | sort | tail -n 1 | awk '
 
 echo "Fetching ${LATEST_BACKUP} from S3"
 
-aws s3 cp s3://$S3_BUCKET/$S3_PREFIX/${LATEST_BACKUP} dump.sql.gz
-gzip -d dump.sql.gz
+if [ "$AES_KEY"  == "**None**" ]; then
+ LATEST_BACKUP=$(aws s3 ls s3://$S3_BUCKET/$S3_PREFIX/ | sort | tail -n 1 | awk '{ print $4 }')
+ aws s3 cp s3://$S3_BUCKET/$S3_PREFIX/${LATEST_BACKUP} dump.sql.gz
+ gzip -d dump.sql.gz
+
+else
+  LATEST_BACKUP=$(aws s3 ls s3://$S3_BUCKET/$S3_PREFIX/ | sort | tail -n 1 | grep dat |awk '{ print $4 }')
+  aws s3 cp s3://$S3_BUCKET/$S3_PREFIX/${LATEST_BACKUP} dump.sql.gz.dat
+  openssl enc -in dump.sql.gz.dat  -out dump.sql.gz -d -aes256 -md sha256 -pbkdf2 -k $AES_KEY
+  gzip -d dump.sql.gz
+fi
+
 
 if [ "${DROP_PUBLIC}" == "yes" ]; then
 	echo "Recreating the public schema"
@@ -70,4 +80,3 @@ echo "Restoring ${LATEST_BACKUP}"
 psql $POSTGRES_HOST_OPTS -d $POSTGRES_DATABASE < dump.sql
 
 echo "Restore complete"
-
