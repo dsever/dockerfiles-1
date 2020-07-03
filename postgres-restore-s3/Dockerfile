@@ -1,4 +1,4 @@
-FROM alpine:3.7
+FROM alpine:3.11
 LABEL maintainer="Johannes Schickling <schickling.j@gmail.com>"
 
 RUN apk add --update openssl && \

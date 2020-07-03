@@ -63,10 +63,13 @@ if [ "$AES_KEY"  == "**None**" ]; then
 ###PIT implementation is missing
 
 else
+  echo 'Searching into AES stream'
   LATEST_BACKUP=$(aws s3 ls s3://$S3_BUCKET/$S3_PREFIX/ --recursive  | tail -n 1 | awk '{print $4}')
+  echo "Retriving backup  $LATEST_BACKUP"
   aws s3 cp s3://$S3_BUCKET/${LATEST_BACKUP} dump.sql.gz.dat
   echo "Fetching ${LATEST_BACKUP} from S3"
-  openssl enc -in dump.sql.gz.dat  -out dump.sql.gz -d -aes256 -md sha256 -pbkdf2 -k $AES_KEY
+  ls -la
+  openssl enc -in dump.sql.gz.dat  -out dump.sql.gz -d -aes256 -md sha256  -pbkdf -k $AES_KEY
   gzip -d dump.sql.gz
 fi
 
