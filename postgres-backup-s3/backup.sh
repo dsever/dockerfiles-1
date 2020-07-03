@@ -74,7 +74,7 @@ else
 
 
 openssl enc -in dump.sql.gz  -out dump.sql.gz.dat -e -aes256  -pbkdf2 -md sha256 -k $AES_KEY
-cat dump.sql.gz.dat | aws $AWS_ARGS s3 cp - s3://$S3_BUCKET/$S3_PREFIX/$(date +"%Y")/$(date +"%m")/$(date +"%d")/${POSTGRES_DATABASE}_$(date +"%H:%M:%SZ").sql.$AES_KEY.gz.dat || exit 2
+cat dump.sql.gz.dat | aws $AWS_ARGS s3 cp - s3://$S3_BUCKET/$S3_PREFIX/$(date +"%Y")/$(date +"%m")/$(date +"%d")/${POSTGRES_DATABASE}_$(date +"%H:%M:%SZ").sql.dat || exit 2
 
 fi
 
