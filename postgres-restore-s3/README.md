@@ -20,7 +20,7 @@ This is made to restore a backup made from postgres-backup-s3, if you backup cam
 
 RESTORE_TO variables can define Point in time restore, and can be:
 
-RESTORE_TO: laters # default will restore to last available backup
+RESTORE_TO: latest # default will restore to last available backup
 RESTORE_TO: 2020/07/05/ # last backup for given date, format YEAR/MONTH/DAY/
 RESTORE_FILE: dev/2020/07/05/defectdojo_01:00:21Z.sql.gz.dat # absolute path inside of bucket PREFIX/YEAR/MONTH/DAY/FILENAME
 

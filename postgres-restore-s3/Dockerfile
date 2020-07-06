@@ -20,6 +20,7 @@ ENV S3_PATH 'backup'
 ENV DROP_PUBLIC 'no'
 ENV AES_KEY **None**
 ENV RESTORE_TO latest
+ENV RESTORE_FILE **None**
 
 ADD restore.sh restore.sh
 
