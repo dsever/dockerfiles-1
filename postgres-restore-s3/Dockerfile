@@ -1,5 +1,5 @@
 FROM alpine:3.11
-LABEL maintainer="Johannes Schickling <schickling.j@gmail.com>"
+LABEL maintainer="Orignal: Johannes Schickling <schickling.j@gmail.com>, Update: dubravko.sever@gmail.com"
 
 RUN apk add --update openssl && \
     rm -rf /var/cache/apk/*
