@@ -51,6 +51,7 @@ export AWS_DEFAULT_REGION=$S3_REGION
 export PGPASSWORD=$POSTGRES_PASSWORD
 POSTGRES_HOST_OPTS="-h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER"
 
+
 echo "Finding latest backup"
 
 
@@ -69,7 +70,7 @@ else
   aws s3 cp s3://$S3_BUCKET/${LATEST_BACKUP} dump.sql.gz.dat
   echo "Fetching ${LATEST_BACKUP} from S3"
   ls -la
-  openssl enc -in dump.sql.gz.dat  -out dump.sql.gz -d -aes256 -md sha256  -pbkdf -k $AES_KEY
+  openssl enc -in dump.sql.gz.dat  -out dump.sql.gz -d -aes256 -md sha256 -pbkdf2 -k $AES_KEY
   gzip -d dump.sql.gz
 fi
 
@@ -81,6 +82,6 @@ fi
 
 echo "Restoring ${LATEST_BACKUP}"
 
+#psql $POSTGRES_HOST_OPTS -d $POSTGRES_DATABASE < dump.sql
 psql $POSTGRES_HOST_OPTS -d $POSTGRES_DATABASE < dump.sql
-
 echo "Restore complete"
