@@ -50,7 +50,7 @@ export AWS_DEFAULT_REGION=$S3_REGION
 
 export PGPASSWORD=$POSTGRES_PASSWORD
 POSTGRES_HOST_OPTS="-h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER"
-
+export PIT=${RESTORE_TO^^}
 
 echo "Finding latest backup"
 
@@ -64,7 +64,6 @@ if [ "$AES_KEY"  == "**None**" ]; then
 ###PIT implementation is missing
 
 else
-  echo 'Searching into AES stream'
   LATEST_BACKUP=$(aws s3 ls s3://$S3_BUCKET/$S3_PREFIX/ --recursive  | tail -n 1 | awk '{print $4}')
   echo "Retriving backup  $LATEST_BACKUP"
   aws s3 cp s3://$S3_BUCKET/${LATEST_BACKUP} dump.sql.gz.dat
