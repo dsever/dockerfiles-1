@@ -78,6 +78,7 @@ generateAWSPath(){
 fi
 
 }
+generateAWSPath
 
 echo "Fetching ${BACKUP} from S3"
 
