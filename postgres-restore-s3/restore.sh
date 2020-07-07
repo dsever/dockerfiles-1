@@ -63,7 +63,7 @@ generateAWSPath(){
        echo "Wrong filename or file doesn't exist"
        exit 1
     else
-       BACKUP=$(aws s3 ls s3://$S3_BUCKET/$RESTORE_FILE | tail -n 1 ${AES_FILTER} | awk '{print $4}')
+       BACKUP=$(aws s3 ls s3://$S3_BUCKET/$RESTORE_FILE  --recursive | tail -n 1  | awk '{print $4}')
 
     fi
 
