@@ -18,7 +18,7 @@ postgres:
     POSTGRES_PASSWORD: password
 
 pgbackups3:
-  image: [repo]/postgres-backup-s3
+  image: schickling/postgres-backup-s3
   links:
     - postgres
   environment:
@@ -32,16 +32,14 @@ pgbackups3:
     POSTGRES_USER: user
     POSTGRES_PASSWORD: password
     POSTGRES_EXTRA_OPTS: '--schema=public --blobs'
-    AES_KEY: some_very_secret_key
 ```
-
-### Building docker image
-
-docker build -t [repo]]/postgres-backup-s3:[tag]  -f ./Dockerfile .
-
 
 ### Automatic Periodic Backups
 
 You can additionally set the `SCHEDULE` environment variable like `-e SCHEDULE="@daily"` to run the backup automatically.
 
 More information about the scheduling can be found [here](http://godoc.org/github.com/robfig/cron#hdr-Predefined_schedules).
+
+## Credits
+
+staff0rd and schickling
