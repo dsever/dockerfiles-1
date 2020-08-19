@@ -16,6 +16,15 @@ This is made to restore a backup made from postgres-backup-s3, if you backup cam
 
 ## Usage
 
+## Restore to PIT
+
+RESTORE_TO variables can define Point in time restore, and can be:
+
+* RESTORE_TO: latest # default will restore to last available backup
+* RESTORE_TO: 2020/07/05/ # last backup for given date, format YEAR/MONTH/DAY/
+* RESTORE_FILE: dev/2020/07/05/defectdojo_01:00:21Z.sql.gz.dat # absolute path inside of bucket PREFIX/YEAR/MONTH/DAY/FILENAME
+
+
 Docker:
 ```sh
 $ docker run -e S3_ACCESS_KEY_ID=key -e S3_SECRET_ACCESS_KEY=secret -e S3_BUCKET=my-bucket -e S3_PREFIX=backup -e POSTGRES_DATABASE=dbname -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_HOST=localhost schickling/postgres-restore-s3
@@ -24,4 +33,3 @@ $ docker run -e S3_ACCESS_KEY_ID=key -e S3_SECRET_ACCESS_KEY=secret -e S3_BUCKET
 ## Dropping public
 
 If you wish to drop the public schema (drop schema public cascade; create schema public) then set the environment variable DROP_PUBLIC=yes. This is useful for situations where you wish to restore a database which currently has data / schemas in it.
-

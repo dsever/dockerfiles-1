@@ -1,4 +1,9 @@
 FROM alpine:3.11
+LABEL maintainer="Orignal: Johannes Schickling <schickling.j@gmail.com>, Update: dubravko.sever@gmail.com"
+
+RUN apk add --update openssl && \
+    rm -rf /var/cache/apk/*
+
 
 ADD install.sh install.sh
 RUN sh install.sh && rm install.sh
@@ -17,6 +22,7 @@ ENV S3_PATH 'backup'
 ENV S3_ENDPOINT **None**
 ENV S3_S3V4 no
 ENV SCHEDULE **None**
+ENV AES_KEY **None**
 
 ADD run.sh run.sh
 ADD backup.sh backup.sh

@@ -1,5 +1,8 @@
-FROM alpine:3.7
-LABEL maintainer="Johannes Schickling <schickling.j@gmail.com>"
+FROM alpine:3.11
+LABEL maintainer="Orignal: Johannes Schickling <schickling.j@gmail.com>, Update: dubravko.sever@gmail.com"
+
+RUN apk add --update openssl && \
+    rm -rf /var/cache/apk/*
 
 ADD install.sh install.sh
 RUN sh install.sh && rm install.sh
@@ -15,6 +18,9 @@ ENV S3_BUCKET **None**
 ENV S3_REGION us-west-1
 ENV S3_PATH 'backup'
 ENV DROP_PUBLIC 'no'
+ENV AES_KEY **None**
+ENV RESTORE_TO latest
+ENV RESTORE_FILE **None**
 
 ADD restore.sh restore.sh
 
