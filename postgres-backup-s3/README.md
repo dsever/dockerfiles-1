@@ -33,6 +33,11 @@ pgbackups3:
     POSTGRES_PASSWORD: password
     POSTGRES_EXTRA_OPTS: '--schema=public --blobs'
 ```
+### Encryption
+
+Dump can be encrypted by AES key specified in variable:
+
+**AES_KEY**
 
 ### Automatic Periodic Backups
 
